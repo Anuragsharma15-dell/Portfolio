@@ -18,8 +18,8 @@ export default function Portfolio() {
 
   const projects = [
     {
-      title: 'AI-Powered Task Manager',
-      desc: 'A full-stack MERN app that uses AI to suggest smart priorities, automate task scheduling, and provide productivity insights.',
+      title: 'AI-Powered Database manager ',
+      desc: 'A full-stack MERN app that uses AI to generate database queries ,  automate task scheduling, and provide productivity insights.',
       tech: 'React, Node.js, MongoDB, TailwindCSS, OpenAI API',
       link: '#',
       icon: Cpu
