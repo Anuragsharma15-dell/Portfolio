@@ -20,15 +20,14 @@ Designed to showcase your identity, skills, and projects with style, speed, and 
 
 🚀 Ready for Vercel, Netlify, or GitHub Pages deployment
 
-🛠️ Tech Stack
-Technology	Purpose
-React + TypeScript	Component architecture & type safety
-Vite	Rapid dev server & optimized builds
-TailwindCSS v4	Next-gen styling
-Optional APIs	Contact form, image handling, etc.
-⚙️ Installation
+| Technology             | Purpose                              |
+| ---------------------- | ------------------------------------ |
+| **React + TypeScript** | Component architecture & type safety |
+| **Vite**               | Rapid dev server & optimized builds  |
+| **TailwindCSS v4**     | Next-gen styling                     |
+| **Optional APIs**      | Contact form, image handling, etc.   |
 
-Clone the project:
+⚙️ Installation
 
 git clone https://github.com/your-username/your-portfolio.git
 cd your-portfolio
@@ -100,6 +99,7 @@ Import normally:
 import myPhoto from "@/assets/myphoto.jpg";
 
 <img src={myPhoto} alt="My Photo" />
+
 
 🤝 Contributing
 
