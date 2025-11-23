@@ -17,7 +17,7 @@ Designed to showcase your identity, skills, and projects with style, speed, and 
 🎞 Smooth animations (Framer Motion optional)
 
 
-🌏production url=>  portfolio-seven-sigma-ahvwgpqktj.vercel.app
+🌏production url=>  "portfolio-seven-sigma-ahvwgpqktj.vercel.app"
 
 
 🧩 Clean, reusable components
