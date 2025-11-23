@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, useMotionTemplate, useMotionValue, AnimatePresence } from 'motion/react';
-import { Github, Linkedin, Mail, ArrowRight, ExternalLink, Code2, Terminal, Cpu, Database, Layout, Globe, Server, Smartphone, Sparkles, MessageSquare, Send, X, Bot, Loader2, PenTool, Copy, Check } from 'lucide-react';
-
-
-
-
-
+import { Github, Linkedin, Mail, ArrowRight, ExternalLink, Code2, Terminal, Cpu, Database, Layout, Globe, Server, Smartphone, Sparkles, MessageSquare, Send, X, Bot, Loader2, PenTool, Copy, Check, Sun, Moon } from 'lucide-react';
 
 // --- API Helper ---
 const callGemini = async (prompt, systemInstruction = "") => {
-  const apiKey = import.meta.env.VITE_API_KEY; // Runtime environment provides this
+  const apiKey = import.meta.env.VITE_API_KEY;
   try {
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
@@ -32,7 +27,7 @@ const callGemini = async (prompt, systemInstruction = "") => {
 };
 
 // --- Utility Component: Spotlight Card ---
-function SpotlightCard({ children, className = "" }) {
+function SpotlightCard({ children, className = "", isDark = true }) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -44,7 +39,11 @@ function SpotlightCard({ children, className = "" }) {
 
   return (
     <div
-      className={`group relative border border-neutral-800 bg-neutral-900/50 overflow-hidden ${className}`}
+      className={`group relative border overflow-hidden rounded-xl transition-colors duration-300 ${
+        isDark
+          ? 'border-neutral-800 bg-neutral-900/50'
+          : 'border-gray-300 bg-gray-50/50'
+      } ${className}`}
       onMouseMove={handleMouseMove}
     >
       <motion.div
@@ -65,7 +64,7 @@ function SpotlightCard({ children, className = "" }) {
 }
 
 // --- Feature 1: AI Project Generator ---
-function ProjectGenerator() {
+function ProjectGenerator({ isDark = true }) {
   const [selectedTech, setSelectedTech] = useState([]);
   const [idea, setIdea] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -90,13 +89,25 @@ function ProjectGenerator() {
 
   return (
     <div className="mb-32 relative">
-      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-purple-500/5 rounded-3xl blur-3xl" />
-      <div className="relative p-8 md:p-12 rounded-3xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-sm">
+      <div className={`absolute inset-0 rounded-3xl blur-3xl transition-colors duration-300 ${
+        isDark
+          ? 'bg-gradient-to-r from-cyan-500/5 to-purple-500/5'
+          : 'bg-gradient-to-r from-cyan-500/10 to-purple-500/10'
+      }`} />
+      <div className={`relative p-8 md:p-12 rounded-3xl border backdrop-blur-sm transition-colors duration-300 ${
+        isDark
+          ? 'border-neutral-800 bg-neutral-900/50'
+          : 'border-gray-300 bg-white/50'
+      }`}>
         <div className="flex items-center gap-3 mb-6">
           <Sparkles className="w-6 h-6 text-amber-400" />
-          <h2 className="text-2xl font-bold text-white">Spark ✨ Project Generator</h2>
+          <h2 className={`text-2xl font-bold transition-colors duration-300 ${
+            isDark ? 'text-white' : 'text-neutral-900'
+          }`}>Spark ✨ Project Generator</h2>
         </div>
-        <p className="text-neutral-400 mb-8">
+        <p className={`mb-8 transition-colors duration-300 ${
+          isDark ? 'text-neutral-400' : 'text-neutral-600'
+        }`}>
           Stuck on what to build next? Select some tech stacks below and let Gemini AI brainstorm a unique project for you.
         </p>
 
@@ -108,7 +119,9 @@ function ProjectGenerator() {
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                 selectedTech.includes(tech)
                   ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300'
-                  : 'bg-neutral-900 border-neutral-700 text-neutral-400 hover:border-neutral-500'
+                  : isDark
+                    ? 'bg-neutral-900 border-neutral-700 text-neutral-400 hover:border-neutral-500'
+                    : 'bg-gray-100 border-gray-400 text-gray-600 hover:border-gray-500'
               }`}
             >
               {tech}
@@ -129,10 +142,18 @@ function ProjectGenerator() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-8 p-6 rounded-xl bg-neutral-950 border border-neutral-800"
+            className={`mt-8 p-6 rounded-xl border transition-colors duration-300 ${
+              isDark
+                ? 'bg-neutral-950 border-neutral-800'
+                : 'bg-gray-100 border-gray-300'
+            }`}
           >
-            <h3 className="text-amber-400 text-sm font-mono mb-2 uppercase tracking-wider">Generated Concept</h3>
-            <p className="text-neutral-200 leading-relaxed whitespace-pre-wrap">{idea}</p>
+            <h3 className={`text-sm font-mono mb-2 uppercase tracking-wider transition-colors duration-300 ${
+              isDark ? 'text-amber-400' : 'text-amber-600'
+            }`}>Generated Concept</h3>
+            <p className={`leading-relaxed whitespace-pre-wrap transition-colors duration-300 ${
+              isDark ? 'text-neutral-200' : 'text-neutral-700'
+            }`}>{idea}</p>
           </motion.div>
         )}
       </div>
@@ -140,8 +161,8 @@ function ProjectGenerator() {
   );
 }
 
-// --- Feature 2: Smart Email Drafter (New!) ---
-function ContactDrafter() {
+// --- Feature 2: Smart Email Drafter ---
+function ContactDrafter({ isDark = true }) {
   const [roughDraft, setRoughDraft] = useState("");
   const [polishedEmail, setPolishedEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -163,13 +184,23 @@ function ContactDrafter() {
   };
 
   return (
-    <div className="relative rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-800 p-8 md:p-12 mb-32">
-      <div className="absolute top-0 right-0 p-12 bg-cyan-500/10 rounded-full blur-3xl" />
+    <div className={`relative rounded-3xl overflow-hidden p-8 md:p-12 mb-32 border transition-colors duration-300 ${
+      isDark
+        ? 'bg-neutral-900 border-neutral-800'
+        : 'bg-white border-gray-300'
+    }`}>
+      <div className={`absolute top-0 right-0 p-12 rounded-full blur-3xl transition-colors duration-300 ${
+        isDark ? 'bg-cyan-500/10' : 'bg-cyan-500/5'
+      }`} />
       
       <div className="relative z-10 grid md:grid-cols-2 gap-12">
         <div>
-          <h2 className="text-3xl font-bold text-white mb-4">Magic Contact ✨</h2>
-          <p className="text-neutral-400 mb-8">
+          <h2 className={`text-3xl font-bold mb-4 transition-colors duration-300 ${
+            isDark ? 'text-white' : 'text-neutral-900'
+          }`}>Magic Contact ✨</h2>
+          <p className={`mb-8 transition-colors duration-300 ${
+            isDark ? 'text-neutral-400' : 'text-neutral-600'
+          }`}>
             Don't know what to say? Just type your messy thoughts below (e.g., "need website for my pizza shop"), and AI will write a professional email for you to send to me.
           </p>
           
@@ -178,7 +209,11 @@ function ContactDrafter() {
               value={roughDraft}
               onChange={(e) => setRoughDraft(e.target.value)}
               placeholder="e.g. Hi I have a startup idea for a pet walking app and need a dev..."
-              className="w-full h-32 bg-neutral-950 border border-neutral-800 rounded-xl p-4 text-neutral-200 focus:ring-1 focus:ring-cyan-500 focus:outline-none transition-all resize-none"
+              className={`w-full h-32 rounded-xl p-4 focus:ring-1 focus:outline-none transition-all resize-none ${
+                isDark
+                  ? 'bg-neutral-950 border border-neutral-800 text-neutral-200 focus:ring-cyan-500'
+                  : 'bg-gray-100 border border-gray-300 text-neutral-900 focus:ring-cyan-500'
+              }`}
             />
             <button
               onClick={draftEmail}
@@ -191,27 +226,47 @@ function ContactDrafter() {
           </div>
         </div>
 
-        <div className="bg-neutral-950 rounded-xl border border-neutral-800 p-6 flex flex-col">
+        <div className={`rounded-xl border p-6 flex flex-col transition-colors duration-300 ${
+          isDark
+            ? 'bg-neutral-950 border-neutral-800'
+            : 'bg-gray-100 border-gray-300'
+        }`}>
           <div className="flex justify-between items-center mb-4">
-            <span className="text-xs font-mono text-neutral-500 uppercase tracking-wider">Preview</span>
+            <span className={`text-xs font-mono uppercase tracking-wider transition-colors duration-300 ${
+              isDark ? 'text-neutral-500' : 'text-gray-600'
+            }`}>Preview</span>
             {polishedEmail && (
               <button 
                 onClick={handleCopy}
-                className="text-neutral-400 hover:text-white transition-colors"
+                className={`transition-colors duration-300 ${
+                  isDark
+                    ? 'text-neutral-400 hover:text-white'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
               >
                 {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
               </button>
             )}
           </div>
           
-          <div className="flex-1 text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap font-mono">
-            {polishedEmail || <span className="text-neutral-600 italic">// Your polished email will appear here...</span>}
+          <div className={`flex-1 text-sm leading-relaxed whitespace-pre-wrap font-mono transition-colors duration-300 ${
+            isDark
+              ? 'text-neutral-300'
+              : 'text-neutral-700'
+          }`}>
+            {polishedEmail || <span className={`italic transition-colors duration-300 ${
+              isDark ? 'text-neutral-600' : 'text-gray-500'
+            }`}>// Your polished email will appear here...</span>}
           </div>
 
           {polishedEmail && (
             <a 
               href={`mailto:anurag863@gmail.com?body=${encodeURIComponent(polishedEmail)}`}
-              className="mt-6 flex items-center justify-center gap-2 w-full py-3 bg-cyan-600/20 text-cyan-400 border border-cyan-600/50 rounded-lg hover:bg-cyan-600/30 transition-colors"
+              className={`mt-6 flex items-center justify-center gap-2 w-full py-3 rounded-lg border transition-colors duration-300 ${
+                isDark
+                  ? 'bg-cyan-600/20 text-cyan-400 border-cyan-600/50 hover:bg-cyan-600/30'
+                  : 'bg-cyan-100 text-cyan-700 border-cyan-300 hover:bg-cyan-200'
+              }`}
             >
               <Mail className="w-4 h-4" />
               Open in Mail App
@@ -224,7 +279,7 @@ function ContactDrafter() {
 }
 
 // --- Feature 3: Floating AI Chat Widget ---
-function AIChatWidget() {
+function AIChatWidget({ isDark = true }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     { role: 'assistant', text: "Hi! I'm Anurag's AI assistant. Ask me anything about his skills, projects, or experience!" }
@@ -283,39 +338,63 @@ function AIChatWidget() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 right-6 w-80 md:w-96 h-[500px] bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
+            className={`fixed bottom-24 right-6 w-80 md:w-96 h-[500px] rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden border transition-colors duration-300 ${
+              isDark
+                ? 'bg-neutral-900 border-neutral-800'
+                : 'bg-white border-gray-300'
+            }`}
           >
             {/* Chat Header */}
-            <div className="p-4 bg-neutral-950 border-b border-neutral-800 flex justify-between items-center">
+            <div className={`p-4 border-b flex justify-between items-center transition-colors duration-300 ${
+              isDark
+                ? 'bg-neutral-950 border-neutral-800'
+                : 'bg-gray-100 border-gray-300'
+            }`}>
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-cyan-500/10 rounded-lg">
-                  <Bot className="w-5 h-5 text-cyan-400" />
+                <div className={`p-1.5 rounded-lg transition-colors duration-300 ${
+                  isDark ? 'bg-cyan-500/10' : 'bg-cyan-100'
+                }`}>
+                  <Bot className={`w-5 h-5 transition-colors duration-300 ${
+                    isDark ? 'text-cyan-400' : 'text-cyan-700'
+                  }`} />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-sm">Anurag's Assistant</h3>
+                  <h3 className={`font-semibold text-sm transition-colors duration-300 ${
+                    isDark ? 'text-white' : 'text-neutral-900'
+                  }`}>Anurag's Assistant</h3>
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-xs text-neutral-400">Online</span>
+                    <span className={`text-xs transition-colors duration-300 ${
+                      isDark ? 'text-neutral-400' : 'text-gray-600'
+                    }`}>Online</span>
                   </div>
                 </div>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-neutral-800 rounded-lg text-neutral-400 hover:text-white transition-colors"
+                className={`p-1 rounded-lg transition-colors duration-300 ${
+                  isDark
+                    ? 'text-neutral-400 hover:bg-neutral-800 hover:text-white'
+                    : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+                }`}
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+            <div className={`flex-1 overflow-y-auto p-4 space-y-4 transition-colors duration-300 ${
+              isDark ? 'bg-neutral-900' : 'bg-white'
+            }`}>
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div 
-                    className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${
+                    className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed transition-colors duration-300 ${
                       msg.role === 'user' 
                         ? 'bg-cyan-600 text-white rounded-br-none' 
-                        : 'bg-neutral-800 text-neutral-200 rounded-bl-none'
+                        : isDark
+                          ? 'bg-neutral-800 text-neutral-200 rounded-bl-none'
+                          : 'bg-gray-200 text-neutral-900 rounded-bl-none'
                     }`}
                   >
                     {msg.text}
@@ -324,10 +403,18 @@ function AIChatWidget() {
               ))}
               {isTyping && (
                 <div className="flex justify-start">
-                  <div className="bg-neutral-800 p-3 rounded-2xl rounded-bl-none flex gap-1">
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className={`p-3 rounded-2xl rounded-bl-none flex gap-1 transition-colors duration-300 ${
+                    isDark ? 'bg-neutral-800' : 'bg-gray-200'
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full animate-bounce transition-colors duration-300 ${
+                      isDark ? 'bg-neutral-500' : 'bg-gray-500'
+                    }`} style={{ animationDelay: '0ms' }} />
+                    <span className={`w-1.5 h-1.5 rounded-full animate-bounce transition-colors duration-300 ${
+                      isDark ? 'bg-neutral-500' : 'bg-gray-500'
+                    }`} style={{ animationDelay: '150ms' }} />
+                    <span className={`w-1.5 h-1.5 rounded-full animate-bounce transition-colors duration-300 ${
+                      isDark ? 'bg-neutral-500' : 'bg-gray-500'
+                    }`} style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               )}
@@ -335,14 +422,22 @@ function AIChatWidget() {
             </div>
 
             {/* Chat Input */}
-            <form onSubmit={handleSend} className="p-4 bg-neutral-950 border-t border-neutral-800">
+            <form onSubmit={handleSend} className={`p-4 border-t transition-colors duration-300 ${
+              isDark
+                ? 'bg-neutral-950 border-neutral-800'
+                : 'bg-gray-100 border-gray-300'
+            }`}>
               <div className="relative">
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask about skills, projects..."
-                  className="w-full bg-neutral-900 text-white text-sm rounded-xl pl-4 pr-12 py-3 border border-neutral-800 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all placeholder:text-neutral-600"
+                  className={`w-full text-sm rounded-xl pl-4 pr-12 py-3 border focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all placeholder:text-opacity-60 ${
+                    isDark
+                      ? 'bg-neutral-900 text-white border-neutral-800 focus:border-cyan-500'
+                      : 'bg-white text-neutral-900 border-gray-400 focus:border-cyan-500'
+                  }`}
                 />
                 <button
                   type="submit"
@@ -361,7 +456,11 @@ function AIChatWidget() {
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-6 right-6 p-4 bg-cyan-500 text-white rounded-full shadow-lg shadow-cyan-500/20 z-50 hover:bg-cyan-600 transition-colors"
+        className={`fixed bottom-6 right-6 p-4 text-white rounded-full shadow-lg z-50 transition-all duration-300 ${
+          isDark
+            ? 'bg-cyan-500 shadow-cyan-500/20 hover:bg-cyan-600'
+            : 'bg-cyan-600 shadow-cyan-500/30 hover:bg-cyan-700'
+        }`}
       >
         {isOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
       </motion.button>
@@ -369,9 +468,21 @@ function AIChatWidget() {
   );
 }
 
-
 export default function Portfolio() {
   const [activeTab, setActiveTab] = useState('all');
+  const [isDark, setIsDark] = useState(() => {
+    try {
+      const stored = localStorage.getItem('theme');
+      return stored ? stored === 'dark' : true;
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch {}
+  }, [isDark]);
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -379,7 +490,6 @@ export default function Portfolio() {
     restDelta: 0.001
   });
 
-  // Global mouse position for background effect
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -443,7 +553,6 @@ export default function Portfolio() {
     { name: 'Next.js', icon: Layout },
   ];
 
-  // Animation Variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -465,7 +574,7 @@ export default function Portfolio() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-200 selection:bg-cyan-500/30 selection:text-cyan-200 font-sans relative overflow-x-hidden">
+    <div className={`min-h-screen font-sans relative overflow-x-hidden transition-colors duration-300 ${isDark ? 'bg-neutral-950 text-neutral-200' : 'bg-gray-50 text-neutral-900'}`}>
       
       {/* Scroll Progress Bar */}
       <motion.div
@@ -473,86 +582,118 @@ export default function Portfolio() {
         style={{ scaleX }}
       />
 
-      {/* Dynamic Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-900 via-neutral-950 to-neutral-950" />
-        <div 
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }}
-        />
-        {/* Mouse Follower Gradient */}
-        <div 
-          className="absolute w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px] transition-transform duration-75 ease-out will-change-transform"
-          style={{
-            left: mousePosition.x - 250,
-            top: mousePosition.y - 250,
-          }}
-        />
-      </div>
+       {/* Dynamic Background */}
+       <div className="fixed inset-0 z-0 pointer-events-none">
+         <div className={`absolute inset-0 transition-colors duration-300 ${
+           isDark 
+             ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-900 via-neutral-950 to-neutral-950'
+             : 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-50 via-white to-gray-100'
+         }`} />
+         <div 
+           className={`absolute inset-0 transition-opacity duration-300 ${isDark ? 'opacity-20' : 'opacity-10'}`}
+           style={{
+             backgroundImage: isDark 
+               ? 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0)'
+               : 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0)',
+             backgroundSize: '40px 40px'
+           }}
+         />
+         <div 
+           className={`absolute w-[500px] h-[500px] rounded-full blur-[100px] transition-all duration-300 ease-out will-change-transform ${
+             isDark ? 'bg-cyan-500/10' : 'bg-cyan-500/5'
+           }`}
+           style={{
+             left: mousePosition.x - 250,
+             top: mousePosition.y - 250,
+           }}
+         />
+       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 pt-20 pb-32">
-        
-        {/* Header / Hero */}
-        <motion.header 
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col md:flex-row gap-12 items-center md:items-start justify-between mb-24"
-        >
-          <div className="flex-1 text-center md:text-left">
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm mb-6">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-              </span>
-              Available for Work
-            </motion.div>
-            
-            <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6">
-              Anurag Sharma
-            </motion.h1>
-            
-            <motion.p variants={itemVariants} className="text-xl text-neutral-400 leading-relaxed max-w-2xl mb-8">
-              Full Stack Developer specializing in building <span className="text-cyan-400">digital products</span> that are precise, performant, and pleasing to the eye.
-            </motion.p>
+       <div className="relative z-10 max-w-5xl mx-auto px-6 pt-20 pb-32">
+         
+         {/* Header / Hero */}
+         <motion.header 
+           variants={containerVariants}
+           initial="hidden"
+           animate="visible"
+           className="flex flex-col md:flex-row gap-12 items-center md:items-start justify-between mb-24"
+         >
+           <div className="flex-1 text-center md:text-left">
+             <motion.div variants={itemVariants} className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-sm mb-6 transition-colors duration-300 ${
+               isDark 
+                 ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400'
+                 : 'bg-cyan-50 border-cyan-200 text-cyan-700'
+             }`}>
+               <span className="relative flex h-2 w-2">
+                 <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                   isDark ? 'bg-cyan-400' : 'bg-cyan-600'
+                 }`}></span>
+                 <span className={`relative inline-flex rounded-full h-2 w-2 ${
+                   isDark ? 'bg-cyan-500' : 'bg-cyan-600'
+                 }`}></span>
+               </span>
+               Available for Work
+             </motion.div>
+             
+             <motion.h1 variants={itemVariants} className={`text-5xl md:text-7xl font-bold tracking-tight mb-6 transition-colors duration-300 ${
+               isDark ? 'text-white' : 'text-neutral-900'
+             }`}>
+               <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">Anurag Sharma</span>
+             </motion.h1>
+             
+             <motion.p variants={itemVariants} className={`text-xl leading-relaxed max-w-2xl mb-8 transition-colors duration-300 ${
+               isDark ? 'text-neutral-400' : 'text-neutral-600'
+             }`}>
+               Full Stack Developer specializing in building <span className={`font-semibold ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>digital products</span> that are precise, performant, and pleasing to the eye.
+             </motion.p>
 
-            <motion.div variants={itemVariants} className="flex gap-4 justify-center md:justify-start">
+            <motion.div variants={itemVariants} className="flex gap-4 justify-center md:justify-start items-center">
               {socialLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-600 transition-all duration-300 hover:-translate-y-1"
+                  className={`p-3 rounded-lg transition-all duration-300 hover:-translate-y-1 ${isDark ? 'bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-600' : 'bg-gray-100 border border-gray-300 text-neutral-700 hover:text-neutral-900 hover:border-gray-400'}`}
                 >
                   <link.icon className="w-5 h-5" />
                 </a>
               ))}
+              <button
+                onClick={() => setIsDark(prev => { const next = !prev; try { localStorage.setItem('theme', next ? 'dark' : 'light'); } catch{} return next; })}
+                aria-label="Toggle theme"
+                className={`p-3 rounded-lg transition-all duration-300 ${isDark ? 'bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white' : 'bg-gray-100 border border-gray-300 text-neutral-700 hover:text-neutral-900'}`}
+              >
+                {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
             </motion.div>
-          </div>
+           </div>
 
-          <motion.div variants={itemVariants} className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-            <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900">
-              {/* Image Placeholder Fix */}
-              <img 
-                src="https://raw.githubusercontent.com/Anuragsharma15-dell/Anuragsharma15-dell.github.io/main/profile.jpg"
-                alt="Profile"
-                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"
-                onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentNode.classList.add('flex', 'items-center', 'justify-center', 'text-neutral-700');
-                    e.target.parentNode.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
-                }}
-              />
-            </div>
-            {/* INSTRUCTION: Replace the src above with your local image path (e.g., "/my-image.jpg") after downloading */}
-          </motion.div>
-        </motion.header>
-
+           <motion.div variants={itemVariants} className="relative group">
+             <div className={`absolute -inset-1 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 ${
+               isDark 
+                 ? 'bg-gradient-to-r from-cyan-500 to-purple-600'
+                 : 'bg-gradient-to-r from-cyan-400 to-purple-500'
+             }`}></div>
+             <div className={`relative w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden border transition-colors duration-300 ${
+               isDark 
+                 ? 'border-neutral-800 bg-neutral-900'
+                 : 'border-gray-300 bg-gray-100'
+             }`}>
+               <img 
+                 src="https://raw.githubusercontent.com/Anuragsharma15-dell/Anuragsharma15-dell.github.io/main/profile.jpg"
+                 alt="Profile"
+                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"
+                 onError={(e) => {
+                     e.target.style.display = 'none';
+                     e.target.parentNode.classList.add('flex', 'items-center', 'justify-center');
+                     e.target.parentNode.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="' + (isDark ? 'text-neutral-700' : 'text-gray-400') + '"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+                 }}
+               />
+             </div>
+           </motion.div>
+         </motion.header>
+ 
         {/* Tech Stack */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -560,12 +701,22 @@ export default function Portfolio() {
           viewport={{ once: true }}
           className="mb-32"
         >
-          <p className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-6">Technologies</p>
+          <p className={`text-sm font-semibold uppercase tracking-wider mb-6 transition-colors duration-300 ${
+            isDark ? 'text-neutral-500' : 'text-gray-600'
+          }`}>Technologies</p>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
             {techStack.map((tech) => (
-              <div key={tech.name} className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl bg-neutral-900/30 border border-neutral-800 hover:border-neutral-700 transition-colors">
-                <tech.icon className="w-6 h-6 text-neutral-400" />
-                <span className="text-sm font-medium text-neutral-300">{tech.name}</span>
+              <div key={tech.name} className={`flex flex-col items-center justify-center gap-3 p-4 rounded-xl border transition-all duration-300 ${
+                isDark 
+                  ? 'bg-neutral-900 border-neutral-800 hover:border-neutral-700'
+                  : 'bg-white border-gray-300 hover:border-gray-400 hover:shadow-md'
+              }`}>
+                <tech.icon className={`w-6 h-6 transition-colors duration-300 ${
+                  isDark ? 'text-neutral-400' : 'text-neutral-600'
+                }`} />
+                <span className={`text-sm font-medium transition-colors duration-300 ${
+                  isDark ? 'text-neutral-300' : 'text-neutral-700'
+                }`}>{tech.name}</span>
               </div>
             ))}
           </div>
@@ -580,19 +731,31 @@ export default function Portfolio() {
             className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4"
           >
             <div>
-              <h2 className="text-3xl font-bold text-white mb-2">Featured Projects</h2>
-              <p className="text-neutral-400">A selection of my recent work.</p>
+              <h2 className={`text-3xl font-bold mb-2 transition-colors duration-300 ${
+                isDark ? 'text-white' : 'text-neutral-900'
+              }`}>Featured Projects</h2>
+              <p className={`transition-colors duration-300 ${
+                isDark ? 'text-neutral-400' : 'text-neutral-600'
+              }`}>A selection of my recent work.</p>
             </div>
             
-            <div className="flex gap-2 p-1 rounded-lg bg-neutral-900 border border-neutral-800">
+            <div className={`flex gap-2 p-1 rounded-lg border transition-colors duration-300 ${
+              isDark 
+                ? 'bg-neutral-900 border-neutral-800'
+                : 'bg-gray-100 border-gray-300'
+            }`}>
               {['all', 'web', 'mobile'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
                     activeTab === tab 
-                      ? 'bg-neutral-800 text-white shadow-sm' 
-                      : 'text-neutral-500 hover:text-neutral-300'
+                      ? isDark
+                        ? 'bg-neutral-800 text-white shadow-sm'
+                        : 'bg-white text-neutral-900 shadow-sm'
+                      : isDark
+                        ? 'text-neutral-500 hover:text-neutral-300'
+                        : 'text-neutral-600 hover:text-neutral-900'
                   }`}
                 >
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -610,24 +773,40 @@ export default function Portfolio() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <SpotlightCard className="h-full rounded-2xl p-8 hover:shadow-2xl transition-shadow duration-300">
+                <SpotlightCard isDark={isDark} className="h-full rounded-2xl p-8 hover:shadow-2xl transition-shadow duration-300">
                   <div className="flex justify-between items-start mb-6">
-                    <div className={`p-3 rounded-xl bg-neutral-950 border border-neutral-800 ${project.color}`}>
+                    <div className={`p-3 rounded-xl border transition-colors duration-300 ${
+                      isDark 
+                        ? 'bg-neutral-950 border-neutral-800'
+                        : 'bg-gray-100 border-gray-300'
+                    } ${project.color}`}>
                       <project.icon className="w-6 h-6" />
                     </div>
-                    <ArrowRight className="-rotate-45 text-neutral-600 group-hover:text-white group-hover:rotate-0 transition-all duration-300" />
+                    <ArrowRight className={`-rotate-45 transition-all duration-300 group-hover:rotate-0 ${
+                      isDark 
+                        ? 'text-neutral-600 group-hover:text-white'
+                        : 'text-gray-400 group-hover:text-neutral-900'
+                    }`} />
                   </div>
                   
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
+                  <h3 className={`text-xl font-bold mb-2 group-hover:text-cyan-400 transition-colors ${
+                    isDark ? 'text-white' : 'text-neutral-900'
+                  }`}>
                     {project.title}
                   </h3>
-                  <p className="text-neutral-400 text-sm leading-relaxed mb-6">
+                  <p className={`text-sm leading-relaxed mb-6 transition-colors duration-300 ${
+                    isDark ? 'text-neutral-400' : 'text-neutral-600'
+                  }`}>
                     {project.desc}
                   </p>
                   
                   <div className="flex flex-wrap gap-2 mt-auto">
                     {project.tech.map((t) => (
-                      <span key={t} className="px-2.5 py-1 rounded-md text-xs font-medium bg-neutral-900 border border-neutral-800 text-neutral-400 group-hover:border-neutral-700 transition-colors">
+                      <span key={t} className={`px-2.5 py-1 rounded-md text-xs font-medium border transition-colors duration-300 ${
+                        isDark
+                          ? 'bg-neutral-900 border-neutral-800 text-neutral-400 group-hover:border-neutral-700'
+                          : 'bg-gray-100 border-gray-300 text-neutral-600 group-hover:border-gray-400'
+                      }`}>
                         {t}
                       </span>
                     ))}
@@ -639,7 +818,7 @@ export default function Portfolio() {
         </div>
 
         {/* Gemini AI Project Generator Section */}
-        <ProjectGenerator />
+        <ProjectGenerator isDark={isDark} />
 
         {/* About Section */}
         <motion.div 
@@ -649,47 +828,85 @@ export default function Portfolio() {
           className="grid md:grid-cols-2 gap-16 items-center mb-32"
         >
           <div>
-            <h2 className="text-3xl font-bold text-white mb-6">About Me</h2>
-            <div className="space-y-6 text-neutral-400 leading-relaxed">
+            <h2 className={`text-3xl font-bold mb-6 transition-colors duration-300 ${
+              isDark ? 'text-white' : 'text-neutral-900'
+            }`}>About Me</h2>
+            <div className={`space-y-6 leading-relaxed transition-colors duration-300 ${
+              isDark ? 'text-neutral-400' : 'text-neutral-600'
+            }`}>
               <p>
-                I am a dedicated Computer Science student at <strong className="text-neutral-200">SIRT, Bhopal</strong>. 
+                I am a dedicated Computer Science student at <strong className={`transition-colors duration-300 ${
+                  isDark ? 'text-neutral-200' : 'text-neutral-900'
+                }`}>SIRT, Bhopal</strong>. 
                 My journey in tech is defined by a curiosity for how things work under the hood.
               </p>
               <p>
-                Unlike the noisy internet, I prefer <strong className="text-neutral-200">clean code</strong> and <strong className="text-neutral-200">minimalist design</strong>. 
+                Unlike the noisy internet, I prefer <strong className={`transition-colors duration-300 ${
+                  isDark ? 'text-neutral-200' : 'text-neutral-900'
+                }`}>clean code</strong> and <strong className={`transition-colors duration-300 ${
+                  isDark ? 'text-neutral-200' : 'text-neutral-900'
+                }`}>minimalist design</strong>. 
                 When I'm not debugging, I'm exploring new web technologies or optimizing backend performance.
               </p>
             </div>
           </div>
           <div className="relative">
-            <div className="absolute top-0 right-0 -z-10 w-64 h-64 bg-cyan-500/20 rounded-full blur-[80px]" />
-            <div className="space-y-8 border-l border-neutral-800 pl-8 ml-4">
+            <div className={`absolute top-0 right-0 -z-10 w-64 h-64 rounded-full blur-[80px] transition-colors duration-300 ${
+              isDark ? 'bg-cyan-500/20' : 'bg-cyan-500/10'
+            }`} />
+            <div className={`space-y-8 border-l pl-8 ml-4 transition-colors duration-300 ${
+              isDark ? 'border-neutral-800' : 'border-gray-300'
+            }`}>
               <div className="relative">
-                <span className="absolute -left-[37px] top-1 h-4 w-4 rounded-full border-2 border-neutral-800 bg-neutral-950"></span>
-                <span className="text-sm text-cyan-500 font-mono mb-1 block">2023 - Present</span>
-                <h4 className="text-white font-medium">B.Tech Computer Science</h4>
-                <p className="text-sm text-neutral-500">Sagar Institute of Research and Technology</p>
+                <span className={`absolute -left-[37px] top-1 h-4 w-4 rounded-full border-2 transition-colors duration-300 ${
+                  isDark 
+                    ? 'border-neutral-800 bg-neutral-950'
+                    : 'border-gray-300 bg-white'
+                }`}></span>
+                <span className={`text-sm font-mono mb-1 block transition-colors duration-300 ${
+                  isDark ? 'text-cyan-500' : 'text-cyan-600'
+                }`}>2023 - Present</span>
+                <h4 className={`font-medium transition-colors duration-300 ${
+                  isDark ? 'text-white' : 'text-neutral-900'
+                }`}>B.Tech Computer Science</h4>
+                <p className={`text-sm transition-colors duration-300 ${
+                  isDark ? 'text-neutral-500' : 'text-neutral-600'
+                }`}>Sagar Institute of Research and Technology</p>
               </div>
               <div className="relative">
-                <span className="absolute -left-[37px] top-1 h-4 w-4 rounded-full border-2 border-neutral-800 bg-neutral-950"></span>
-                <span className="text-sm text-neutral-500 font-mono mb-1 block">2022</span>
-                <h4 className="text-white font-medium">Started Web Development</h4>
-                <p className="text-sm text-neutral-500">Self-taught full stack journey begins</p>
+                <span className={`absolute -left-[37px] top-1 h-4 w-4 rounded-full border-2 transition-colors duration-300 ${
+                  isDark 
+                    ? 'border-neutral-800 bg-neutral-950'
+                    : 'border-gray-300 bg-white'
+                }`}></span>
+                <span className={`text-sm font-mono mb-1 block transition-colors duration-300 ${
+                  isDark ? 'text-neutral-500' : 'text-neutral-600'
+                }`}>2022</span>
+                <h4 className={`font-medium transition-colors duration-300 ${
+                  isDark ? 'text-white' : 'text-neutral-900'
+                }`}>Started Web Development</h4>
+                <p className={`text-sm transition-colors duration-300 ${
+                  isDark ? 'text-neutral-500' : 'text-neutral-600'
+                }`}>Self-taught full stack journey begins</p>
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Magic Contact Drafter (Replaces simple CTA) */}
-        <ContactDrafter />
+        {/* Magic Contact Drafter */}
+        <ContactDrafter isDark={isDark} />
 
         {/* Footer */}
-        <footer className="mt-20 pt-10 border-t border-neutral-900 text-center text-neutral-600 text-sm">
+        <footer className={`mt-20 pt-10 border-t text-center text-sm transition-colors duration-300 ${
+          isDark 
+            ? 'border-neutral-900 text-neutral-600'
+            : 'border-gray-300 text-neutral-500'
+        }`}>
           <p>© {new Date().getFullYear()} Anurag Sharma. Built with React & Tailwind.</p>
         </footer>
 
         {/* Floating Chat Widget */}
-        <AIChatWidget />
+        <AIChatWidget isDark={isDark} />
 
       </div>
     </div>
