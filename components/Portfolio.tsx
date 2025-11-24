@@ -310,7 +310,7 @@ function AIChatWidget({ isDark = true }) {
       Here is his profile context:
       - Name: Anurag Sharma
       - Role: Full Stack Developer (Student)
-      - Education: B.Tech Computer Science at SIRT, Bhopal (2023-Present)
+      - Education: B.Tech Computer Science at SIRT, Bhopal (2025-Present)
       - Key Skills: React, Node.js, MongoDB, TailwindCSS, Framer Motion, TypeScript, Next.js.
       - Projects: 
         1. AI Database Manager (React, Node, OpenAI)
@@ -881,7 +881,7 @@ export default function Portfolio() {
                 }`}></span>
                 <span className={`text-sm font-mono mb-1 block transition-colors duration-300 ${
                   isDark ? 'text-neutral-500' : 'text-neutral-600'
-                }`}>2022</span>
+                }`}>2025-April</span>
                 <h4 className={`font-medium transition-colors duration-300 ${
                   isDark ? 'text-white' : 'text-neutral-900'
                 }`}>Started Web Development</h4>
